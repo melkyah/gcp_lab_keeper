@@ -112,6 +112,7 @@ def get_instances_bystatus(instance_list):
 
         instances_bystatus[key] = value
 
+    # Print formatted contents of dictionary
     for status in instances_bystatus:
         pprint(f"{status} instances: {', '.join(map(str, instances_bystatus[status]))}")
 
