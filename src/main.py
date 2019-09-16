@@ -47,7 +47,6 @@ def request_instances(project, target_zones):
 
             if 'items' in response:
                 for instance in response['items']:
-                    # TODO: Change code below to process each `instance` resource:
 
                     instance_list.append(instance)
 
@@ -56,11 +55,11 @@ def request_instances(project, target_zones):
                 pprint(f"{len(response['items'])} instances found in {zone}.")
 
             else:
-                pprint(f"No instances in {zone}. Continuing...")
+                pprint(f"No instances found in zone {zone}. Continuing...")
                 break
 
     pprint(f"{len(instance_list)} instances found in project {project}.")
-    return instance_list # TODO: This function still doesn't return anything
+    return instance_list
 
 def _request_zones(project):
     """Make an API call to return all available zones for a project."""
@@ -103,12 +102,17 @@ def get_instances_bystatus(instance_list):
         if instance.get("status", None) not in status_list:
             status_list.append(instance.get("status", None))
 
-    # Create a dictionary containing instances by status
+    # Create a dictionary containing instances and zone by status
     for key in status_list:
         value = []
         for instance in instance_list:
             if instance.get("status", None) == key:
-                value.append(instance.get("name", None))
+                instance_data = {}
+                instance_name = instance.get("name", None)
+                zone_name = instance.get("zone", None).split('/')[-1]
+                instance_data["name"] = instance_name
+                instance_data["zone"] = zone_name
+                value.append(instance_data)
 
         instances_bystatus[key] = value
 
@@ -116,7 +120,25 @@ def get_instances_bystatus(instance_list):
     for status in instances_bystatus:
         pprint(f"{status} instances: {', '.join(map(str, instances_bystatus[status]))}")
 
+    return instances_bystatus
 
+def stop_running_instances(instance_status_list, project):
+    """Stop compute engine instances in RUNNING state."""
+    # TODO: Check if instances in PROVISIONING, STAGING and REPAIRING
+    #  states can and need to be stopped.
+
+    if "RUNNING" in instance_status_list.keys():
+        for running_instance in instance_status_list["RUNNING"]:
+            instance = running_instance.get("name", None)
+            zone = running_instance.get("zone", None)
+
+            request = SERVICE.instances().stop(project=project, zone=zone, instance=instance)
+            pprint(f"Stopping instance {instance} in zone {zone}...")
+            response = request.execute()
+    else:
+        pprint(f"There are no running instances in project {project}.")
+
+    return
 
 def main():
     """Main"""
@@ -130,7 +152,10 @@ def main():
     instances_list = request_instances(PROJECT, target_zones)
 
     # Create a list of instances by status
-    get_instances_bystatus(instances_list)
+    instance_status_list = get_instances_bystatus(instances_list)
+
+    # Stop running VMs
+    stop_running_instances(instance_status_list, PROJECT)
 
     return
 
