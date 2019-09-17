@@ -20,15 +20,23 @@ locals {
     "pubsub.googleapis.com",
     "cloudfunctions.googleapis.com",
     "cloudscheduler.googleapis.com",
-    "appengine.googleapis.com",
+    "appengine.googleapis.com"
   ]
 }
 
 
 # Enable services
 
+resource "google_project_service" "resource_manager" {
+  project = "${var.project_id}"
+  service = "cloudresourcemanager.googleapis.com"
+
+  disable_dependent_services = true
+}
+
 resource "google_project_service" "services" {
-  count = "${length(local.service_list)}"
+  count      = "${length(local.service_list)}"
+  depends_on = ["google_project_service.resource_manager"]
 
   project = "${var.project_id}"
   service = "${element(local.service_list, count.index)}"
