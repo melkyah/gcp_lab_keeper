@@ -22,17 +22,22 @@ import re
 from googleapiclient import discovery
 from oauth2client.client import GoogleCredentials
 
-# TODO: Manage credentials using service account
+from config import Config
+from authenticator import Authenticator
 
-CREDENTIALS = GoogleCredentials.get_application_default()
+CONFIG = Config()
+AUTHENTICATOR = Authenticator()
+
+CREDENTIALS = AUTHENTICATOR.make_credentials()
 
 SERVICE = discovery.build('compute', 'v1', credentials=CREDENTIALS)
 
 # Project ID for this request.
-PROJECT = 'prod-host-4f86'  # TODO: Make this an input parameter.
+PROJECT = CONFIG.project
 
 # The list of the zone prefixes for this request.
-WANTED_ZONES_PREFIXES = ['us']  # TODO: Make this an input parameter.
+WANTED_ZONES_PREFIXES = CONFIG.zone_prefixes
+
 
 def request_instances(project, target_zones):
     """Make an API call to return all existing instances for a zone in a project."""
@@ -61,6 +66,7 @@ def request_instances(project, target_zones):
     pprint(f"{len(instance_list)} instances found in project {project}.")
     return instance_list
 
+
 def _request_zones(project):
     """Make an API call to return all available zones for a project."""
     zone_request = SERVICE.zones().list(project=project)
@@ -77,6 +83,7 @@ def _request_zones(project):
 
         return zone_list
 
+
 def _filter_zones(wanted_zones_prefix, zone_list):
     """Filter unwanted zones from a zone list using a prefix."""
     target_zones = []
@@ -88,6 +95,7 @@ def _filter_zones(wanted_zones_prefix, zone_list):
                 target_zones.append(zone)
 
     return target_zones
+
 
 def get_instances_bystatus(instance_list):
     """Take an instance object list and return a dictionary with
@@ -118,9 +126,11 @@ def get_instances_bystatus(instance_list):
 
     # Print formatted contents of dictionary
     for status in instances_bystatus:
-        pprint(f"{status} instances: {', '.join(map(str, instances_bystatus[status]))}")
+        pprint(
+            f"{status} instances: {', '.join(map(str, instances_bystatus[status]))}")
 
     return instances_bystatus
+
 
 def stop_running_instances(instance_status_list, project):
     """Stop compute engine instances in RUNNING state."""
@@ -140,6 +150,7 @@ def stop_running_instances(instance_status_list, project):
 
     return
 
+
 def main():
     """Main"""
     # Get a list of zone names
@@ -158,6 +169,7 @@ def main():
     stop_running_instances(instance_status_list, PROJECT)
 
     return
+
 
 if __name__ == '__main__':
     main()
