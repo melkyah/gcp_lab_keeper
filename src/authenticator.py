@@ -16,8 +16,29 @@
     This module contains the implementation of authentication managing components
 """
 
+import json
+
+from google.oauth2 import service_account
+
+from config import Config
+
 
 class Authenticator:
     """
-        Manage GCP credentials.
+        Manages GCP credentials.
     """
+
+    def __init__(self):
+        """Initialze parameters"""
+        self.config = Config()
+        self.credentials_path = self.config.credentials
+
+    def make_credentials(self):
+        """Creates GCP credentials from a JSON key file"""
+        with open(self.credentials_path) as source:
+            info = json.load(source)
+
+        credentials = service_account.Credentials.from_service_account_info(
+            info)
+
+        return credentials
