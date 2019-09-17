@@ -19,7 +19,7 @@ provider "google" {
 
 locals {
   project_id            = "prod-host-4f86"
-  credentials_file_path = "../../credentials.json"
+  credentials_file_path = "../../../credentials.json"
 }
 
 terraform {
@@ -28,7 +28,7 @@ terraform {
   backend "gcs" {
     bucket      = "tf-remote-state-test"
     prefix      = "Terraform/state/GCP_lab_keeper"
-    credentials = "../../credentials.json"
+    credentials = "../../../credentials.json"
   }
 }
 
