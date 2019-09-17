@@ -27,10 +27,10 @@ CREDENTIALS = GoogleCredentials.get_application_default()
 SERVICE = discovery.build('compute', 'v1', credentials=CREDENTIALS)
 
 # Project ID for this request.
-PROJECT = ${project_id}  # TODO: Make this an input parameter.
+PROJECT = "${project_id}"  # TODO: Make this an input parameter.
 
 # The list of the zone prefixes for this request.
-WANTED_ZONES_PREFIXES = ${wanted_zone_prefixes}  # TODO: Make this an input parameter.
+WANTED_ZONES_PREFIXES = ["${wanted_zone_prefixes}"]  # TODO: Make this an input parameter.
 
 
 def stop_gce_instances(event, context):

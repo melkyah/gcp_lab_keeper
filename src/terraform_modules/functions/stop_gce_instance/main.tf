@@ -19,46 +19,60 @@
 data "template_file" "stop_gce_instance" {
   template = "${file("${path.module}/template/main.py.tpl")}"
   vars = {
-    project_id = "${var.project_id}"
-    wanted_zone_prefixes = "${var.wanted_zone_prefixes}"
+    project_id           = "${var.project_id}"
+    wanted_zone_prefixes = "${join(", ", var.wanted_zone_prefixes)}"
   }
 }
 
-resource "google_storage_bucket_object" "stop_gce_instance" {
-  name   = "stop_gce_instance/main.py"
-  source = "${data.template_file.stop_gce_instance.rendered}"
-  bucket = "${var.storage_bucket}"
+# Zip file contents
+data "archive_file" "function" {
+  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+
+  type        = "zip"
+  output_path = "${path.module}/files/function.zip"
+
+  source {
+    content  = "${data.template_file.stop_gce_instance.rendered}"
+    filename = "main.py"
+  }
+
+  source {
+    content  = "${file("${path.module}/template/requirements.txt")}"
+    filename = "requirements.txt"
+  }
 }
 
-resource "google_storage_bucket_object" "requirements" {
-  name   = "stop_gce_instance/requirements.txt"
-  source = "${file("${path.module}/template/requirements.txt")}"
+resource "google_storage_bucket_object" "function" {
+  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+
+  name   = "stop_gce_instance/function.zip"
+  source = "${data.archive_file.function.0.output_path}"
   bucket = "${var.storage_bucket}"
 }
 
 resource "google_pubsub_topic" "trigger_topic" {
-  name = "${var.trigger_topic_name}"
+  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+
+  name    = "${var.trigger_topic_name}"
   project = "${var.project_id}"
-  labels = {
-    app = "GCP_lab_keeper"
-  }
 }
 
 resource "google_cloudfunctions_function" "main_function" {
-  name                  = "stop_gce_instance"
-  description           = "A function that stops GCE instances for given zones in the project"
-  runtime               = "python37"
+  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+
+  name        = "stop_gce_instance"
+  description = "A function that stops GCE instances for given zones in the project"
+  runtime     = "python37"
+  region      = "${var.region}"
 
   available_memory_mb   = 128
   source_archive_bucket = "${var.storage_bucket}"
-  source_archive_object = "${google_storage_bucket_object.stop_gce_instance.self_link}"
+  source_archive_object = "${google_storage_bucket_object.function.0.name}"
   timeout               = 60
   entry_point           = "stop_gce_instances"
-  labels = {
-    app = "GCP_lab_keeper"
-  }
-  event_trigger = {
-      event_type = "google.pubsub.topic.publish"
-      resource = "${google_pubsub_topic.trigger_topic.name}"
+
+  event_trigger {
+    event_type = "google.pubsub.topic.publish"
+    resource   = "${google_pubsub_topic.trigger_topic.0.name}"
   }
 }

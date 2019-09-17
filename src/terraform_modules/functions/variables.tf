@@ -16,20 +16,43 @@
 #    on a schedules basis.
 
 variable "project_id" {
-    description = "Project in which to deploy the modules."
+  description = "Project in which to deploy the modules."
 }
 
 variable "storage_bucket_name" {
-    description = "Name of the cloud storage bucket in which to sotre data."
-    default = "GCP_lab_keeper_data"
+  description = "Name of the cloud storage bucket in which to sotre data."
+  default     = "gcp-lab-keeper-data"
 }
 
 variable "storage_bucket_location" {
-    description = "Location of the cloud storage bucket in which to sotre data."
-    default = "US"
+  description = "Location of the cloud storage bucket in which to sotre data."
+  default     = "us-west1"
 }
 
 variable "storage_bucket_class" {
-    description = "Class of the cloud storage bucket in which to sotre data."
-    default = "Regional"
+  description = "Class of the cloud storage bucket in which to sotre data."
+  default     = "REGIONAL"
+}
+
+variable "region" {
+  description = "region for function deployment."
+  default     = "us-central1"
+}
+
+# Variables for stop_gce_instance_function
+
+variable "enable_stop_gce_instance" {
+  description = "Enables deployment of stop_gce_instance function."
+  type        = bool
+  default     = false
+}
+
+variable "wanted_zone_prefixes" {
+  type        = "list"
+  description = "List of zone prefixes in which to search for instances."
+}
+
+variable "trigger_topic_name" {
+  description = "Name of the pub/sub topic that triggers the function."
+  default     = "stop-gce-instance-topic"
 }

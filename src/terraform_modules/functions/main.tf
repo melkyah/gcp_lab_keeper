@@ -17,10 +17,24 @@
 
 # This module deploys desired GCP Lab Keeper functions to a given project.
 
+provider "archive" {}
+
 resource "google_storage_bucket" "code_store" {
-  name     = "${var.storage_bucket_name}"
-  project  = "${var.project_id}"
+  name    = "${var.storage_bucket_name}"
+  project = "${var.project_id}"
 
   storage_class = "${var.storage_bucket_class}"
-  location = "${var.storage_bucket_location}"
+  location      = "${var.storage_bucket_location}"
+}
+
+# If enable_stop_gce_instance = True, deploy stop_gce_instance
+module "stop_gce_instance" {
+  source = "./stop_gce_instance"
+
+  enable_stop_gce_instance = "${var.enable_stop_gce_instance}"
+  project_id               = "${var.project_id}"
+  wanted_zone_prefixes     = "${var.wanted_zone_prefixes}"
+  storage_bucket           = "${google_storage_bucket.code_store.name}"
+  trigger_topic_name       = "${var.trigger_topic_name}"
+  region                   = "${var.region}"
 }

@@ -13,19 +13,30 @@
 # limitations under the License.
 
 variable "project_id" {
-    description = "Project in which to deploy the function."
+  description = "Project in which to deploy the function."
+}
+
+variable "enable_stop_gce_instance" {
+  description = "Enables deployment of stop_gce_instance function."
+  type        = bool
+  default     = false
 }
 
 variable "wanted_zone_prefixes" {
-    type = "list"
-    description = "List of zone prefixes in which to search for instances."
+  type        = "list"
+  description = "List of zone prefixes in which to search for instances."
 }
 
 variable "trigger_topic_name" {
-    description = "Name of the pub/sub topic that triggers the function."
-    default = "stop_gce_instance_topic"
+  description = "Name of the pub/sub topic that triggers the function."
+  default     = "stop_gce_instance_topic"
 }
 
 variable "storage_bucket" {
-    description = "Cloud Storage Bucket in which to deploy function code."
+  description = "Cloud Storage Bucket in which to deploy function code."
+}
+
+variable "region" {
+  description = "region for function deployment."
+  default     = "us-central1"
 }
