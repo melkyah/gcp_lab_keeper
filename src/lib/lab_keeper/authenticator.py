@@ -20,7 +20,7 @@ import json
 
 from google.oauth2 import service_account
 
-from config import Config
+from lib.lab_keeper.config import Config
 
 
 class Authenticator:

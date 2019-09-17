@@ -21,8 +21,8 @@ import re
 
 from googleapiclient import discovery
 
-from config import Config
-from authenticator import Authenticator
+from lib.lab_keeper.config import Config
+from lib.lab_keeper.authenticator import Authenticator
 
 
 class LabKeeper:
