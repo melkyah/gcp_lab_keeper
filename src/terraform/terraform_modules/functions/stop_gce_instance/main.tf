@@ -15,6 +15,12 @@
 # This module deploys a cloud function that stops VM instances 
 #    on a schedules basis.
 
+# Enable services
+resource "google_project_services" "services" {
+  project  = "${var.project_id}"
+  services = ["pubsub.googleapis.com"]
+}
+
 # Function templates.
 data "template_file" "stop_gce_instance" {
   template = "${file("${path.module}/template/main.py.tpl")}"
@@ -53,7 +59,8 @@ resource "google_storage_bucket_object" "function" {
 # Create a pub/sub topic to trigger the function
 
 resource "google_pubsub_topic" "trigger_topic" {
-  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+  count      = "${var.enable_stop_gce_instance ? 1 : 0}"
+  depends_on = ["google_project_services.services"]
 
   name    = "${var.trigger_topic_name}"
   project = "${var.project_id}"
