@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-This module handles application configuration values
+This module handles application configuration values.
 """
 
 

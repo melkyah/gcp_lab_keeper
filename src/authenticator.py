@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-    This module contains the implementation of authentication managing components
+    This module contains the implementation of authentication managing components.
 """
 
 import json
