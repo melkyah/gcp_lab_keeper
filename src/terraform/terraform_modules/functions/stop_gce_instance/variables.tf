@@ -22,6 +22,12 @@ variable "enable_stop_gce_instance" {
   default     = false
 }
 
+variable "create_appengine_app" {
+  description = "Enables deployment of app engine application for scheduler."
+  type        = bool
+  default     = false
+}
+
 variable "wanted_zone_prefixes" {
   type        = "list"
   description = "List of zone prefixes in which to search for instances."
@@ -44,6 +50,11 @@ variable "region" {
 variable "scheduler_region" {
   description = "region for function deployment."
   default     = "us-central1"
+}
+
+variable "scheduler_location_id" {
+  description = "Location for scheduler app deployment."
+  default     = "us-central"
 }
 
 variable "cron_schedule_string" {

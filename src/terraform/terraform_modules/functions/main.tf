@@ -39,5 +39,7 @@ module "stop_gce_instance" {
   region                   = "${var.region}"
   scheduler_timezone       = "${var.scheduler_timezone}"
   scheduler_region         = "${var.scheduler_region}"
+  scheduler_location_id    = "${var.scheduler_location_id}"
   cron_schedule_string     = "${var.cron_schedule_string}"
+  create_appengine_app     = "${var.create_appengine_app}"
 }

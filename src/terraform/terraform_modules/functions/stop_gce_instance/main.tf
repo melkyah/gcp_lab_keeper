@@ -15,10 +15,25 @@
 # This module deploys a cloud function that stops VM instances 
 #    on a schedules basis.
 
+locals {
+  service_list = [
+    "pubsub.googleapis.com",
+    "cloudfunctions.googleapis.com",
+    "cloudscheduler.googleapis.com",
+    "appengine.googleapis.com",
+  ]
+}
+
+
 # Enable services
-resource "google_project_services" "services" {
-  project  = "${var.project_id}"
-  services = ["pubsub.googleapis.com"]
+
+resource "google_project_service" "services" {
+  count = "${length(local.service_list)}"
+
+  project = "${var.project_id}"
+  service = "${element(local.service_list, count.index)}"
+
+  disable_dependent_services = true
 }
 
 # Function templates.
@@ -60,7 +75,7 @@ resource "google_storage_bucket_object" "function" {
 
 resource "google_pubsub_topic" "trigger_topic" {
   count      = "${var.enable_stop_gce_instance ? 1 : 0}"
-  depends_on = ["google_project_services.services"]
+  depends_on = ["google_project_service.services"]
 
   name    = "${var.trigger_topic_name}"
   project = "${var.project_id}"
@@ -69,7 +84,8 @@ resource "google_pubsub_topic" "trigger_topic" {
 # Deploy the cloud function using the uploaded files
 
 resource "google_cloudfunctions_function" "main_function" {
-  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+  count      = "${var.enable_stop_gce_instance ? 1 : 0}"
+  depends_on = ["google_project_service.services"]
 
   name        = "stop_gce_instance"
   description = "A function that stops GCE instances for given zones in the project"
@@ -90,8 +106,17 @@ resource "google_cloudfunctions_function" "main_function" {
 
 # Schedule function run
 
+resource "google_app_engine_application" "app" {
+  count      = "${var.create_appengine_app ? 1 : 0}"
+  depends_on = ["google_project_service.services"]
+
+  project     = "${var.project_id}"
+  location_id = "${var.scheduler_location_id}"
+}
+
 resource "google_cloud_scheduler_job" "function_run" {
-  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+  count      = "${var.enable_stop_gce_instance ? 1 : 0}"
+  depends_on = ["google_project_service.services", "google_app_engine_application.app"]
 
   name        = "stop_gce_instance_schedule"
   description = "This schedule triggers the execution of stop_gce_instance function."
