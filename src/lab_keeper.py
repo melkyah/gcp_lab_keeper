@@ -20,7 +20,6 @@ from pprint import pprint
 import re
 
 from googleapiclient import discovery
-from oauth2client.client import GoogleCredentials
 
 from config import Config
 from authenticator import Authenticator
