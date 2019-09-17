@@ -17,11 +17,6 @@ provider "google" {
   project     = "${local.project_id}"
 }
 
-locals {
-  project_id            = "prod-host-4f86"
-  credentials_file_path = "../../../credentials.json"
-}
-
 terraform {
   required_version = ">= 0.10.0"
 
@@ -32,6 +27,13 @@ terraform {
   }
 }
 
+
+locals {
+  project_id            = "prod-host-4f86"
+  credentials_file_path = "../../../credentials.json"
+  timezone              = "America/Buenos_Aires"
+}
+
 # Implement function modules
 
 module "gcp_lab_keeper" {
@@ -40,4 +42,8 @@ module "gcp_lab_keeper" {
   project_id               = "${local.project_id}"
   enable_stop_gce_instance = true
   wanted_zone_prefixes     = ["us"]
+  cron_schedule_string     = "*/2 * * * *"
+  scheduler_timezone       = "${local.timezone}"
+  scheduler_region         = "us-west2"
+  region                   = "us-central1"
 }

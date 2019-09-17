@@ -40,3 +40,18 @@ variable "region" {
   description = "region for function deployment."
   default     = "us-central1"
 }
+
+variable "scheduler_region" {
+  description = "region for function deployment."
+  default     = "us-central1"
+}
+
+variable "cron_schedule_string" {
+  description = "String for schedule in unix cron format. Default runs daily at 8 PM."
+  default     = "0 20 * * *"
+}
+
+variable "scheduler_timezone" {
+  description = "Time zone for the scheduler."
+  default     = "America/New_York"
+}

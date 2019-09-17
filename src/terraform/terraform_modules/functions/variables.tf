@@ -56,3 +56,18 @@ variable "trigger_topic_name" {
   description = "Name of the pub/sub topic that triggers the function."
   default     = "stop-gce-instance-topic"
 }
+
+variable "cron_schedule_string" {
+  description = "String for schedule in unix cron format. Default runs daily at 8 PM."
+  default     = "0 20 * * *"
+}
+
+variable "scheduler_timezone" {
+  description = "Time zone for the scheduler."
+  default     = "America/New_York"
+}
+
+variable "scheduler_region" {
+  description = "region for function deployment."
+  default     = "us-central1"
+}

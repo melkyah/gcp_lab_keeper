@@ -15,7 +15,7 @@
 # This module deploys a cloud function that stops VM instances 
 #    on a schedules basis.
 
-# Function templates
+# Function templates.
 data "template_file" "stop_gce_instance" {
   template = "${file("${path.module}/template/main.py.tpl")}"
   vars = {
@@ -24,7 +24,7 @@ data "template_file" "stop_gce_instance" {
   }
 }
 
-# Zip file contents
+# Creates a Zip file from the function files and uploads it to the bucket.
 data "archive_file" "function" {
   count = "${var.enable_stop_gce_instance ? 1 : 0}"
 
@@ -50,12 +50,16 @@ resource "google_storage_bucket_object" "function" {
   bucket = "${var.storage_bucket}"
 }
 
+# Create a pub/sub topic to trigger the function
+
 resource "google_pubsub_topic" "trigger_topic" {
   count = "${var.enable_stop_gce_instance ? 1 : 0}"
 
   name    = "${var.trigger_topic_name}"
   project = "${var.project_id}"
 }
+
+# Deploy the cloud function using the uploaded files
 
 resource "google_cloudfunctions_function" "main_function" {
   count = "${var.enable_stop_gce_instance ? 1 : 0}"
@@ -74,5 +78,22 @@ resource "google_cloudfunctions_function" "main_function" {
   event_trigger {
     event_type = "google.pubsub.topic.publish"
     resource   = "${google_pubsub_topic.trigger_topic.0.name}"
+  }
+}
+
+# Schedule function run
+
+resource "google_cloud_scheduler_job" "function_run" {
+  count = "${var.enable_stop_gce_instance ? 1 : 0}"
+
+  name        = "stop_gce_instance_schedule"
+  description = "This schedule triggers the execution of stop_gce_instance function."
+  region      = "${var.scheduler_region}"
+  schedule    = "${var.cron_schedule_string}"
+  time_zone   = "${var.scheduler_timezone}"
+
+  pubsub_target {
+    topic_name = "${google_pubsub_topic.trigger_topic.0.id}"
+    data       = "${base64encode("Run")}"
   }
 }

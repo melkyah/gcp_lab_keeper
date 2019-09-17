@@ -37,4 +37,7 @@ module "stop_gce_instance" {
   storage_bucket           = "${google_storage_bucket.code_store.name}"
   trigger_topic_name       = "${var.trigger_topic_name}"
   region                   = "${var.region}"
+  scheduler_timezone       = "${var.scheduler_timezone}"
+  scheduler_region         = "${var.scheduler_region}"
+  cron_schedule_string     = "${var.cron_schedule_string}"
 }
