@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package instance_manager;
+
+service InstanceManager{
+    rpc StopInstances(StopInstanceRequest) returns (InstanceList) {}
+}
+
+message Instance{
+   string name = 1;
+   string zone = 2;
+}
+
+message Project{
+    string project_id = 1;
+}
+
+message ZonePrefixes{
+    repeated string prefixes = 1;
+}
+
+message StopInstanceRequest{
+    Project project = 1;
+
+    ZonePrefixes zones = 2;
+}
+
+message InstanceList{
+    repeated Instance instances = 1;
+}
