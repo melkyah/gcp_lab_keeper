@@ -6,9 +6,13 @@ service InstanceManager{
     rpc StopInstances(StopInstanceRequest) returns (InstanceList) {}
 }
 
+message Credentials{
+    string credentials = 1;
+}
+
 message Instance{
-   string name = 1;
-   string zone = 2;
+    string name = 1;
+    string zone = 2;
 }
 
 message Project{
@@ -20,9 +24,9 @@ message ZonePrefixes{
 }
 
 message StopInstanceRequest{
-    Project project = 1;
-
-    ZonePrefixes zones = 2;
+    Credentials credentials = 1;
+    Project project = 2;
+    ZonePrefixes zones = 3;
 }
 
 message InstanceList{

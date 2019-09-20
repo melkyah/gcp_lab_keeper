@@ -20,10 +20,41 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='instance_manager',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\x16instance_manager.proto\x12\x10instance_manager\"&\n\x08Instance\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04zone\x18\x02 \x01(\t\"\x1d\n\x07Project\x12\x12\n\nproject_id\x18\x01 \x01(\t\" \n\x0cZonePrefixes\x12\x10\n\x08prefixes\x18\x01 \x03(\t\"p\n\x13StopInstanceRequest\x12*\n\x07project\x18\x01 \x01(\x0b\x32\x19.instance_manager.Project\x12-\n\x05zones\x18\x02 \x01(\x0b\x32\x1e.instance_manager.ZonePrefixes\"=\n\x0cInstanceList\x12-\n\tinstances\x18\x01 \x03(\x0b\x32\x1a.instance_manager.Instance2k\n\x0fInstanceManager\x12X\n\rStopInstances\x12%.instance_manager.StopInstanceRequest\x1a\x1e.instance_manager.InstanceList\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\x16instance_manager.proto\x12\x10instance_manager\"\"\n\x0b\x43redentials\x12\x13\n\x0b\x63redentials\x18\x01 \x01(\t\"&\n\x08Instance\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04zone\x18\x02 \x01(\t\"\x1d\n\x07Project\x12\x12\n\nproject_id\x18\x01 \x01(\t\" \n\x0cZonePrefixes\x12\x10\n\x08prefixes\x18\x01 \x03(\t\"\xa4\x01\n\x13StopInstanceRequest\x12\x32\n\x0b\x63redentials\x18\x01 \x01(\x0b\x32\x1d.instance_manager.Credentials\x12*\n\x07project\x18\x02 \x01(\x0b\x32\x19.instance_manager.Project\x12-\n\x05zones\x18\x03 \x01(\x0b\x32\x1e.instance_manager.ZonePrefixes\"=\n\x0cInstanceList\x12-\n\tinstances\x18\x01 \x03(\x0b\x32\x1a.instance_manager.Instance2k\n\x0fInstanceManager\x12X\n\rStopInstances\x12%.instance_manager.StopInstanceRequest\x1a\x1e.instance_manager.InstanceList\"\x00\x62\x06proto3')
 )
 
 
+
+
+_CREDENTIALS = _descriptor.Descriptor(
+  name='Credentials',
+  full_name='instance_manager.Credentials',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='credentials', full_name='instance_manager.Credentials.credentials', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=44,
+  serialized_end=78,
+)
 
 
 _INSTANCE = _descriptor.Descriptor(
@@ -59,8 +90,8 @@ _INSTANCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=44,
-  serialized_end=82,
+  serialized_start=80,
+  serialized_end=118,
 )
 
 
@@ -90,8 +121,8 @@ _PROJECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=84,
-  serialized_end=113,
+  serialized_start=120,
+  serialized_end=149,
 )
 
 
@@ -121,8 +152,8 @@ _ZONEPREFIXES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=115,
-  serialized_end=147,
+  serialized_start=151,
+  serialized_end=183,
 )
 
 
@@ -134,15 +165,22 @@ _STOPINSTANCEREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='project', full_name='instance_manager.StopInstanceRequest.project', index=0,
+      name='credentials', full_name='instance_manager.StopInstanceRequest.credentials', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='zones', full_name='instance_manager.StopInstanceRequest.zones', index=1,
+      name='project', full_name='instance_manager.StopInstanceRequest.project', index=1,
       number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='zones', full_name='instance_manager.StopInstanceRequest.zones', index=2,
+      number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -159,8 +197,8 @@ _STOPINSTANCEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=149,
-  serialized_end=261,
+  serialized_start=186,
+  serialized_end=350,
 )
 
 
@@ -190,19 +228,28 @@ _INSTANCELIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=263,
-  serialized_end=324,
+  serialized_start=352,
+  serialized_end=413,
 )
 
+_STOPINSTANCEREQUEST.fields_by_name['credentials'].message_type = _CREDENTIALS
 _STOPINSTANCEREQUEST.fields_by_name['project'].message_type = _PROJECT
 _STOPINSTANCEREQUEST.fields_by_name['zones'].message_type = _ZONEPREFIXES
 _INSTANCELIST.fields_by_name['instances'].message_type = _INSTANCE
+DESCRIPTOR.message_types_by_name['Credentials'] = _CREDENTIALS
 DESCRIPTOR.message_types_by_name['Instance'] = _INSTANCE
 DESCRIPTOR.message_types_by_name['Project'] = _PROJECT
 DESCRIPTOR.message_types_by_name['ZonePrefixes'] = _ZONEPREFIXES
 DESCRIPTOR.message_types_by_name['StopInstanceRequest'] = _STOPINSTANCEREQUEST
 DESCRIPTOR.message_types_by_name['InstanceList'] = _INSTANCELIST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
+
+Credentials = _reflection.GeneratedProtocolMessageType('Credentials', (_message.Message,), {
+  'DESCRIPTOR' : _CREDENTIALS,
+  '__module__' : 'instance_manager_pb2'
+  # @@protoc_insertion_point(class_scope:instance_manager.Credentials)
+  })
+_sym_db.RegisterMessage(Credentials)
 
 Instance = _reflection.GeneratedProtocolMessageType('Instance', (_message.Message,), {
   'DESCRIPTOR' : _INSTANCE,
@@ -247,8 +294,8 @@ _INSTANCEMANAGER = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=326,
-  serialized_end=433,
+  serialized_start=415,
+  serialized_end=522,
   methods=[
   _descriptor.MethodDescriptor(
     name='StopInstances',

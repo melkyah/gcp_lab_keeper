@@ -15,6 +15,7 @@
 Client for accessing Instance Manager Server.
 """
 
+import json
 import grpc
 import instance_manager_pb2
 import instance_manager_pb2_grpc
@@ -36,9 +37,22 @@ class InstanceManagerClient:
 
         self.stub = instance_manager_pb2_grpc.InstanceManagerStub(self.channel)
 
-    def stop_instances(self, project, zones_prefixes):
+    def _load_credentials(self, path):
+        """Loads account credentials from json file in path."""
+
+        with open(path) as json_data:
+            credentials = json.load(json_data)
+            json_data.close()
+
+        return json.dumps(credentials)
+
+    def stop_instances(self, project, zones_prefixes, credentials_path):
         """Client function to call the rpc for stop_instances."""
+
+        credentials = self._load_credentials(credentials_path)
+
         stop_instances_message = instance_manager_pb2.StopInstanceRequest(
+            credentials=instance_manager_pb2.Credentials(credentials=credentials),
             project=instance_manager_pb2.Project(project_id=project),
             zones=instance_manager_pb2.ZonePrefixes(prefixes=zones_prefixes)
         )

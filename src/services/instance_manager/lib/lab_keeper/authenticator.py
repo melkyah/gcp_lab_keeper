@@ -16,8 +16,6 @@
     This module contains the implementation of authentication managing components.
 """
 
-import json
-
 from google.oauth2 import service_account
 
 from lib.lab_keeper.config import Config
@@ -33,12 +31,9 @@ class Authenticator:
         self.config = Config()
         self.credentials_path = self.config.credentials
 
-    def make_credentials(self):
+    def make_credentials(self, credentials_string):
         """Creates GCP credentials from a JSON key file"""
-        with open(self.credentials_path) as source:
-            info = json.load(source)
-
         credentials = service_account.Credentials.from_service_account_info(
-            info)
+            credentials_string)
 
         return credentials
