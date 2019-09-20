@@ -61,8 +61,8 @@ class InstanceManagerServicer(instance_manager_pb2_grpc.InstanceManagerServicer)
         zone_list = self._request_zones(client, target_project)
         target_zones = self._filter_zones(wanted_zones_prefixes, zone_list)
         instances_list = self._request_instances(client, target_project, target_zones)
-        instance_status_list = self._get_instances_bystatus(client, instances_list)
-        stopped_instances = self.stop_running_instances(
+        instance_status_list = self._get_instances_bystatus(instances_list)
+        stopped_instances = self._stop_running_instances(
             client, instance_status_list, target_project)
 
         stopped_instances_list = []
@@ -164,7 +164,7 @@ class InstanceManagerServicer(instance_manager_pb2_grpc.InstanceManagerServicer)
 
         return target_zones
 
-    def _get_instances_bystatus(self, client, instance_list):
+    def _get_instances_bystatus(self, instance_list):
         """Take an instance object list and return a dictionary with
             statuses as keys and a list of instances as its values."""
 
@@ -198,7 +198,7 @@ class InstanceManagerServicer(instance_manager_pb2_grpc.InstanceManagerServicer)
 
         return instances_bystatus
 
-    def stop_running_instances(self, client, instance_status_list, project):
+    def _stop_running_instances(self, client, instance_status_list, project):
         """Stop compute engine instances in RUNNING state."""
         # TODO: Check if instances in PROVISIONING, STAGING and REPAIRING
         #  states can and need to be stopped.
