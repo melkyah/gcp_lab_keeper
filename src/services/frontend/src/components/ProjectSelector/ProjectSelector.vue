@@ -21,7 +21,7 @@
 
 import { Credentials, GetProjectRequest } from "./project_manager_pb";
 import { ProjectManagerClient } from "./project_manager_grpc_web_pb";
-import {grpc, BrowserHeaders} from "grpc-web-client";
+import Account from "../../assets/credentials.json";
 
 export default {
   name: "ProjectSelector",
@@ -31,10 +31,12 @@ export default {
   data: function(){
       return {
           projectManagerHost: "localhost",
-          projectManagerPort: "8090",
+          projectManagerPort: "8080",
           credPath: "../../assets/credentials.json",
           projectList: [],
-          client: null
+          client: null,
+          request: null,
+          credentials: null
       };
   },
   created: function(){
@@ -45,16 +47,22 @@ export default {
   },
   // Start method definitions
   methods: {
-      getProjects: function(credFile){
-          let credentials = new Credentials();
-          let request = new GetProjectRequest();
-          credentials.setCredentials(credFile);
-          request.setCredentials = credentials;
+      getProjects: function(){
+
+          console.log("Starting request Projects function.")
+          console.log(Account)
+
+          this.credentials = new Credentials();
+          this.request = new GetProjectRequest();
+          this.credentials.setCredentials(JSON.stringify(Account));
+          this.request.setCredentials(this.credentials);
+
+          console.log(this.request)
+          console.log(this.credentials)
         
-          this.client.getProjects(request, function(error, result) {
-            if (error) console.log('Error: ', error);
-            else console.log(result.toObject());
-          });
+          this.client.getProjects(this.request, {}, function(err, response){
+            console.log(response)
+          })
       },
   }
 }

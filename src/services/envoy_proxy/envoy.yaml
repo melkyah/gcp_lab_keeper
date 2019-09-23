@@ -7,7 +7,7 @@ static_resources:
   listeners:
   - name: listener_0
     address:
-      socket_address: { address: 0.0.0.0, port_value: 8090 }
+      socket_address: { address: 0.0.0.0, port_value: 8080 }
     filter_chains:
     - filters:
       - name: envoy.http_connection_manager
@@ -20,19 +20,12 @@ static_resources:
             - name: local_service
               domains: ["*"]
               cors:
-               allow_origin:
-               - "*"
-               allow_methods: "GET"
-               filter_enabled:
-                 default_value:
-                   numerator: 100
-                   denominator: HUNDRED
-                 runtime_key: cors.www.enabled
-               shadow_enabled:
-                 default_value:
-                   numerator: 0
-                   denominator: HUNDRED
-                 runtime_key: cors.www.shadow_enabled
+                allow_origin:
+                - "*"
+                allow_methods: GET, PUT, DELETE, POST, OPTIONS
+                allow_headers: keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,custom-header-1,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web,grpc-timeout
+                max_age: "1728000"
+                expose_headers: custom-header-1,grpc-status,grpc-message
               routes:
               - match: { prefix: "/" }
                 route: { cluster: echo_service }
