@@ -62,6 +62,8 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
         Returns list of projects available for user.
         """
 
+        project_list = []
+
         pprint("Request received...")
 
         credentials = self.authenticator.make_credentials(
@@ -71,14 +73,30 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
         service = discovery.build(
             'cloudresourcemanager', 'v1', credentials=credentials)
 
-        
-        request = service.projects().list()
+
+        request = service.projects().list(filter='lifecycleState = ACTIVE')
         response = request.execute()
         for project in response.get('projects', []):
             # TODO: Change code below to process each `project` resource:
-            pprint(project)
-        request = service.projects().list_next(
-            previous_request=request, previous_response=response)
+
+            project_name = project.get("name", None)
+            project_id = project.get("projectId", None)
+
+            project_list.append(
+                project_manager_pb2.Project(
+                    name=project_name,
+                    project_id=project_id
+                ))
+
+        pprint(f'Found {len(project_list)} active projects.')
+
+        result = project_manager_pb2.ProjectList(
+            projects=project_list
+        )
+
+        pprint(result)
+
+        return result
 
 curr_server = ProjectManagerServicer()
 curr_server.start_server()
