@@ -5,7 +5,7 @@
         <label for="projectSelector" class="col-sm-2 col-form-label"
           >Project</label
         >
-        <div class="col-sm-10">
+        <div class="col-sm-8">
           <select
             class="form-control"
             type="text"
