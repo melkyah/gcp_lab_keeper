@@ -50,15 +50,11 @@ export default {
       getProjects: function(){
 
           console.log("Starting request Projects function.")
-          console.log(Account)
 
           this.credentials = new Credentials();
           this.request = new GetProjectRequest();
           this.credentials.setCredentials(JSON.stringify(Account));
           this.request.setCredentials(this.credentials);
-
-          console.log(this.request)
-          console.log(this.credentials)
         
           this.client.getProjects(this.request, {}, function(err, response){
             console.log(response)
