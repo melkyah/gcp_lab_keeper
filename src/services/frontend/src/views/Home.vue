@@ -1,18 +1,23 @@
 <template>
   <div class="home">
-    <img alt="GCP Logo" src="../assets/gcp_logo.png" height="25%" width="25%" />
-    <Main msg="GCP Lab Keeper" />
+    <img
+      alt="GCP Logo"
+      src="../assets/Google-Cloud-Logo.png"
+      height="50%"
+      width="50%"
+    />
+    <main-view msg="GCP Lab Keeper" />
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import Main from "@/components/Main.vue"; // @ is an alias to /src
+<script>
+// @ is an alias to /src
+import MainView from "@/components/MainView.vue";
 
-@Component({
+export default {
+  name: "home",
   components: {
-    Main
+    MainView
   }
-})
-export default class Home extends Vue {}
+};
 </script>
