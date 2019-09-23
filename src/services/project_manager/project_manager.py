@@ -57,7 +57,7 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
             project_manager_server.stop(0)
             pprint("Instance Manager Server stopped...")
 
-    def get_projects(self, request, context):
+    def GetProjects(self, request, context):
         """
         Returns list of projects available for user.
         """
@@ -71,16 +71,14 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
         service = discovery.build(
             'cloudresourcemanager', 'v1', credentials=credentials)
 
-        while True:
-            request = service.projects().list()
-            response = request.execute()
-
-            for project in response.get('projects', []):
-                # TODO: Change code below to process each `project` resource:
-                pprint(project)
-
-            request = service.projects().list_next(
-                previous_request=request, previous_response=response)
+        
+        request = service.projects().list()
+        response = request.execute()
+        for project in response.get('projects', []):
+            # TODO: Change code below to process each `project` resource:
+            pprint(project)
+        request = service.projects().list_next(
+            previous_request=request, previous_response=response)
 
 curr_server = ProjectManagerServicer()
 curr_server.start_server()

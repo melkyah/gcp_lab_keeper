@@ -28,4 +28,5 @@ class Config:
         self.credentials = 'D:\Projects\lab-keeper\gcp_instance_watcher\src\services\credentials.json'
         self.instance_manager_server = 'localhost'
         self.instance_manager_port = '46001'
+        self.project_manager_server = 'localhost'
         self.project_manager_port = '46002'
