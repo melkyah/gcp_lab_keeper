@@ -16,6 +16,7 @@ This module manages Google Cloud Projects.
 """
 
 import time
+import json
 from pprint import pprint
 from concurrent import futures
 from googleapiclient import discovery
@@ -55,6 +56,31 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
         except KeyboardInterrupt:
             project_manager_server.stop(0)
             pprint("Instance Manager Server stopped...")
+
+    def get_projects(self, request, context):
+        """
+        Returns list of projects available for user.
+        """
+
+        pprint("Request received...")
+
+        credentials = self.authenticator.make_credentials(
+            json.loads(request.credentials.credentials)
+        )
+
+        service = discovery.build(
+            'cloudresourcemanager', 'v1', credentials=credentials)
+
+        while True:
+            request = service.projects().list()
+            response = request.execute()
+
+            for project in response.get('projects', []):
+                # TODO: Change code below to process each `project` resource:
+                pprint(project)
+
+            request = service.projects().list_next(
+                previous_request=request, previous_response=response)
 
 curr_server = ProjectManagerServicer()
 curr_server.start_server()
