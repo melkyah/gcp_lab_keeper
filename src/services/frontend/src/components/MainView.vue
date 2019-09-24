@@ -25,7 +25,7 @@
           <b-col>
             <stop-instances-button
               msg="Stop VMs"
-              v-bind:project="selectedProject"
+              @stopButtonClicked="stopVMs"
             />
           </b-col>
         </b-row>
@@ -60,6 +60,17 @@ export default {
      */
     projectChanged: function(value) {
       this.selectedProject = value;
+    },
+    /**
+     * Stop VMs running in the selected
+     * GCP project.
+     */
+    stopVMs: function() {
+      if (this.selectedProject) {
+        console.log(this.selectedProject);
+      } else {
+        console.log("No project selected.");
+      }
     }
   }
 };
