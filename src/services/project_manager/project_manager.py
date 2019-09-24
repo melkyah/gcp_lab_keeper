@@ -28,8 +28,10 @@ import project_manager_pb2_grpc
 from lib.lab_keeper.config import Config
 from lib.lab_keeper.authenticator import Authenticator
 
+
 class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
     """gRPC server for Project Manager service."""
+
     def __init__(self):
         self.config = Config()
         self.authenticator = Authenticator()
@@ -55,7 +57,7 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
                 time.sleep(60*60*60)
         except KeyboardInterrupt:
             project_manager_server.stop(0)
-            pprint("Instance Manager Server stopped...")
+            pprint("Project Manager Server stopped...")
 
     def GetProjects(self, request, context):
         """
@@ -72,7 +74,6 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
 
         service = discovery.build(
             'cloudresourcemanager', 'v1', credentials=credentials)
-
 
         request = service.projects().list(filter='lifecycleState = ACTIVE')
         response = request.execute()
@@ -97,6 +98,7 @@ class ProjectManagerServicer(project_manager_pb2_grpc.ProjectManagerServicer):
         pprint(result)
 
         return result
+
 
 curr_server = ProjectManagerServicer()
 curr_server.start_server()

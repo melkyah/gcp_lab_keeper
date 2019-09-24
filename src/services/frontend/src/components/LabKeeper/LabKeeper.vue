@@ -37,6 +37,14 @@
 <script>
 import ProjectSelector from "@/components/LabKeeper/ProjectSelector/ProjectSelector.vue";
 import StopInstancesButton from "@/components/LabKeeper/StopInstancesButton/StopInstancesButton.vue";
+import {
+  StopInstanceRequest,
+  Credentials,
+  Project,
+  ZonePrefixes
+} from "./instance_manager_pb";
+import { InstanceManagerClient } from "./instance_manager_grpc_web_pb";
+import Account from "../../assets/credentials.json";
 
 export default {
   name: "LabKeeper",
@@ -46,11 +54,22 @@ export default {
   },
   data: function() {
     return {
-      selectedProject: ""
+      instanceManagerHost: "localhost",
+      instanceManagerPort: "8090",
+      selectedProject: "",
+      stoppedVMs: []
     };
   },
   props: {
     msg: String
+  },
+  // Create client on component creation
+  created: function() {
+    this.client = new InstanceManagerClient(
+      `http://${this.instanceManagerHost}:${this.instanceManagerPort}`,
+      null,
+      null
+    );
   },
   methods: {
     /**
@@ -67,6 +86,19 @@ export default {
      */
     stopVMs: function() {
       if (this.selectedProject) {
+        let request = new StopInstanceRequest();
+        let credentials = new Credentials();
+        let project = new Project();
+        let targetZones = new ZonePrefixes();
+        credentials.setCredentials(JSON.stringify(Account));
+        project.setProjectId(this.selectedProject);
+        targetZones.setPrefixesList(["us"]);
+        request.setCredentials(credentials);
+        request.setProject(project);
+        request.setZones(targetZones);
+        this.client.stopInstances(request, {}, (err, response) => {
+          this.stoppedVMs = response.toObject().instancesList;
+        });
         console.log(this.selectedProject);
       } else {
         console.log("No project selected.");
