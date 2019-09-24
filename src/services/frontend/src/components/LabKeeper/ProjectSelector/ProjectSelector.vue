@@ -11,9 +11,9 @@
           id="projectSelector"
         >
           <option value selected disabled>Select project...</option>
-          <option v-for="(item, index) in projectList" :key="index">
-            {{ item.name }}
-          </option>
+          <option v-for="(item, index) in projectList" :key="index">{{
+            item.name
+          }}</option>
         </select>
       </div>
     </form>
@@ -23,7 +23,7 @@
 <script>
 import { Credentials, GetProjectRequest } from "./project_manager_pb";
 import { ProjectManagerClient } from "./project_manager_grpc_web_pb";
-import Account from "../../assets/credentials.json";
+import Account from "../../../assets/credentials.json";
 
 export default {
   name: "ProjectSelector",

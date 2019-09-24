@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import ProjectSelector from "@/components/ProjectSelector/ProjectSelector.vue";
-import StopInstancesButton from "@/components/StopInstancesButton/StopInstancesButton.vue";
+import ProjectSelector from "@/components/LabKeeper/ProjectSelector/ProjectSelector.vue";
+import StopInstancesButton from "@/components/LabKeeper/StopInstancesButton/StopInstancesButton.vue";
 
 export default {
-  name: "MainView",
+  name: "LabKeeper",
   components: {
     ProjectSelector,
     StopInstancesButton
