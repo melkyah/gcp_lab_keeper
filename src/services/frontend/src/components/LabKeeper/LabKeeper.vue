@@ -8,9 +8,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <p>
-            GCP Lab Keeper helps you maintain all you lab projects in order.
-          </p>
+          <p>GCP Lab Keeper helps you maintain all you lab projects in order.</p>
         </b-col>
       </b-row>
     </b-container>
@@ -23,10 +21,7 @@
         </b-row>
         <b-row class="mt-4">
           <b-col>
-            <stop-instances-button
-              msg="Stop VMs"
-              @stopButtonClicked="stopVMs"
-            />
+            <stop-instances-button msg="Stop VMs" @stopButtonClicked="stopVMs" />
           </b-col>
         </b-row>
       </b-card>

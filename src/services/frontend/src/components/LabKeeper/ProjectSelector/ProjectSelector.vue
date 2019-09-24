@@ -1,22 +1,20 @@
 <template>
   <div id="project-selector">
-    <form>
-      <div class="form-row">
-        <label for="projectSelector" class="col-sm-4 col-form-label"
-          >Project:</label
-        >
-        <select
-          v-model="selectedProject"
-          class="form-control col-sm-6"
-          id="projectSelector"
-        >
-          <option value selected disabled>Select project...</option>
-          <option v-for="(item, index) in projectList" :key="index">{{
-            item.name
-          }}</option>
-        </select>
-      </div>
-    </form>
+    <b-form-group label="Project:">
+      <select v-model="selectedProject" class="form-control" id="projectSelector">
+        <option value selected disabled>-- Select project --</option>
+        <option v-for="(item, index) in projectList" :key="index">{{ item.name }}</option>
+      </select>
+    </b-form-group>
+    <b-form-group label="Zones:">
+      <b-form-radio-group
+        id="zone-group"
+        v-model="selectedZone"
+        :options="zoneList"
+        name="zone-options"
+        @click.prevent="checkZone"
+      ></b-form-radio-group>
+    </b-form-group>
   </div>
 </template>
 
@@ -35,6 +33,15 @@ export default {
     return {
       projectManagerHost: "localhost",
       projectManagerPort: "8080",
+      zoneList: [
+        "us",
+        "europe",
+        "asia",
+        "southamerica",
+        "northamerica",
+        "australia"
+      ],
+      selectedZone: "us",
       projectList: null,
       client: null,
       request: null,
@@ -89,6 +96,13 @@ export default {
           this.projectList = response.toObject().projectsList;
         }
       });
+    },
+    /**
+     * Updates checked zone and emits to parent.
+     */
+    checkZone: function() {
+      console.log("test");
+      this.$emit("zoneSelected", this.selectedZone);
     }
   }
 };
