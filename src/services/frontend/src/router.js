@@ -4,12 +4,15 @@ import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: "/",
       name: "home",
-      component: Home
+      component: Home,
+      meta: {
+        title: "GCP Lab Keeper"
+      }
     },
     {
       path: "/about",
@@ -23,3 +26,9 @@ export default new Router({
     }
   ]
 });
+
+router.afterEach((to, from) => {
+  document.title = to.meta.title;
+});
+
+export default router;
