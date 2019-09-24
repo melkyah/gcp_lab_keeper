@@ -2,9 +2,7 @@
   <div id="project-selector">
     <form>
       <div class="form-row">
-        <label for="projectSelector" class="col-sm-4 col-form-label">
-          Project:
-        </label>
+        <label for="projectSelector" class="col-sm-4 col-form-label">Project:</label>
         <select class="form-control col-sm-6" id="projectSelector">
           <option>1</option>
           <option>2</option>
@@ -18,7 +16,6 @@
 </template>
 
 <script>
-
 import { Credentials, GetProjectRequest } from "./project_manager_pb";
 import { ProjectManagerClient } from "./project_manager_grpc_web_pb";
 import Account from "../../assets/credentials.json";
@@ -28,38 +25,44 @@ export default {
   props: {
     msg: String
   },
-  data: function(){
-      return {
-          projectManagerHost: "localhost",
-          projectManagerPort: "8080",
-          credPath: "../../assets/credentials.json",
-          projectList: [],
-          client: null,
-          request: null,
-          credentials: null
-      };
+  data: function() {
+    return {
+      projectManagerHost: "localhost",
+      projectManagerPort: "8080",
+      projectList: null,
+      client: null,
+      request: null,
+      credentials: null
+    };
   },
-  created: function(){
-      this.client = new ProjectManagerClient(
-          `http://${this.projectManagerHost}:${this.projectManagerPort}`, null, null
-          );
-      this.getProjects(this.credPath);
+  created: function() {
+    this.client = new ProjectManagerClient(
+      `http://${this.projectManagerHost}:${this.projectManagerPort}`,
+      null,
+      null
+    );
+    this.getProjects();
   },
   // Start method definitions
   methods: {
-      getProjects: function(){
+    getProjects: function() {
+      console.log("Starting request Projects function.");
 
-          console.log("Starting request Projects function.")
+      this.credentials = new Credentials();
+      this.request = new GetProjectRequest();
 
-          this.credentials = new Credentials();
-          this.request = new GetProjectRequest();
-          this.credentials.setCredentials(JSON.stringify(Account));
-          this.request.setCredentials(this.credentials);
-        
-          this.client.getProjects(this.request, {}, function(err, response){
-            console.log(response)
-          })
-      },
+      this.credentials.setCredentials(JSON.stringify(Account));
+      this.request.setCredentials(this.credentials);
+
+      this.client.getProjects(this.request, {}, (err, response) => {
+        if (err) {
+          console.log(err.code);
+          console.log(err.message);
+        } else {
+          this.projectList = response.toObject().projectsList;
+        }
+      });
+    }
   }
-}
+};
 </script>
