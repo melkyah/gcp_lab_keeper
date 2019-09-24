@@ -1,20 +1,45 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      GCP Lab Keeper helps you maintain all you lab projects in order.
-    </p>
-    <project-selector />
+    <b-container fluid class="bv-example-row">
+      <b-row>
+        <b-col>
+          <h1>{{ msg }}</h1>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <p>
+            GCP Lab Keeper helps you maintain all you lab projects in order.
+          </p>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container>
+      <b-card bg-variant="light" header="Try me" class="text-center">
+        <b-row>
+          <b-col>
+            <project-selector />
+          </b-col>
+        </b-row>
+        <b-row class="mt-4">
+          <b-col>
+            <stop-instances-button msg="Stop VMs" />
+          </b-col>
+        </b-row>
+      </b-card>
+    </b-container>
   </div>
 </template>
 
 <script>
 import ProjectSelector from "@/components/ProjectSelector/ProjectSelector.vue";
+import StopInstancesButton from "@/components/StopInstancesButton/StopInstancesButton.vue";
 
 export default {
   name: "MainView",
   components: {
-    ProjectSelector
+    ProjectSelector,
+    StopInstancesButton
   },
   props: {
     msg: String
