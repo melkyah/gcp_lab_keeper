@@ -11,9 +11,9 @@
           id="projectSelector"
         >
           <option value selected disabled>Select project...</option>
-          <option v-for="(item, index) in projectList" :key="index">{{
-            item.name
-          }}</option>
+          <option v-for="(item, index) in projectList" :key="index">
+            {{ item.name }}
+          </option>
         </select>
       </div>
     </form>
@@ -41,6 +41,19 @@ export default {
       credentials: null,
       selectedProject: ""
     };
+  },
+  watch: {
+    /**
+     * This returns the selected project ID
+     * to its parent component so that it can
+     * be used in the button request.
+     */
+    selectedProject: function(value) {
+      let project = this.projectList.find(function(element) {
+        return element.name == value;
+      });
+      this.$emit("projectChanged", project.projectId);
+    }
   },
   // This runs on component creation
   created: function() {
