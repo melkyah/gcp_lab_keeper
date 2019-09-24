@@ -1,11 +1,6 @@
 <template>
   <div class="home">
-    <img
-      alt="GCP Logo"
-      src="../assets/Google-Cloud-Logo.png"
-      height="50%"
-      width="50%"
-    />
+    <img alt="GCP Logo" src="../assets/Google-Cloud-Logo.png" height="250px" width="250px" />
     <main-view msg="GCP Lab Keeper" />
   </div>
 </template>
