@@ -18,12 +18,15 @@
       <b-card bg-variant="light" header="Try me" class="text-center">
         <b-row>
           <b-col>
-            <project-selector />
+            <project-selector @projectChanged="projectChanged" />
           </b-col>
         </b-row>
         <b-row class="mt-4">
           <b-col>
-            <stop-instances-button msg="Stop VMs" />
+            <stop-instances-button
+              msg="Stop VMs"
+              v-bind:project="selectedProject"
+            />
           </b-col>
         </b-row>
       </b-card>
@@ -41,8 +44,23 @@ export default {
     ProjectSelector,
     StopInstancesButton
   },
+  data: function() {
+    return {
+      selectedProject: ""
+    };
+  },
   props: {
     msg: String
+  },
+  methods: {
+    /**
+     * Updates selectedProject value when
+     * projectSelector component triggers a
+     * projectChanged event.
+     */
+    projectChanged: function(value) {
+      this.selectedProject = value;
+    }
   }
 };
 </script>
