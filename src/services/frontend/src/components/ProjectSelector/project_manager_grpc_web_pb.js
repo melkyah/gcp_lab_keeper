@@ -6,13 +6,11 @@
 
 // GENERATED CODE -- DO NOT EDIT!
 
-
-
 const grpc = {};
-grpc.web = require('grpc-web');
+grpc.web = require("grpc-web");
 
 const proto = {};
-proto.project_manager = require('./project_manager_pb.js');
+proto.project_manager = require("./project_manager_pb.js");
 
 /**
  * @param {string} hostname
@@ -22,10 +20,13 @@ proto.project_manager = require('./project_manager_pb.js');
  * @struct
  * @final
  */
-proto.project_manager.ProjectManagerClient =
-    function(hostname, credentials, options) {
+proto.project_manager.ProjectManagerClient = function(
+  hostname,
+  credentials,
+  options
+) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options["format"] = "text";
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -49,7 +50,6 @@ proto.project_manager.ProjectManagerClient =
   this.options_ = options;
 };
 
-
 /**
  * @param {string} hostname
  * @param {?Object} credentials
@@ -58,10 +58,13 @@ proto.project_manager.ProjectManagerClient =
  * @struct
  * @final
  */
-proto.project_manager.ProjectManagerPromiseClient =
-    function(hostname, credentials, options) {
+proto.project_manager.ProjectManagerPromiseClient = function(
+  hostname,
+  credentials,
+  options
+) {
   if (!options) options = {};
-  options['format'] = 'text';
+  options["format"] = "text";
 
   /**
    * @private @const {!grpc.web.GrpcWebClientBase} The client
@@ -84,7 +87,6 @@ proto.project_manager.ProjectManagerPromiseClient =
    */
   this.options_ = options;
 };
-
 
 /**
  * @const
@@ -93,7 +95,7 @@ proto.project_manager.ProjectManagerPromiseClient =
  *   !proto.project_manager.ProjectList>}
  */
 const methodDescriptor_ProjectManager_GetProjects = new grpc.web.MethodDescriptor(
-  '/project_manager.ProjectManager/GetProjects',
+  "/project_manager.ProjectManager/GetProjects",
   grpc.web.MethodType.UNARY,
   proto.project_manager.GetProjectRequest,
   proto.project_manager.ProjectList,
@@ -103,7 +105,6 @@ const methodDescriptor_ProjectManager_GetProjects = new grpc.web.MethodDescripto
   },
   proto.project_manager.ProjectList.deserializeBinary
 );
-
 
 /**
  * @const
@@ -120,7 +121,6 @@ const methodInfo_ProjectManager_GetProjects = new grpc.web.AbstractClientBase.Me
   proto.project_manager.ProjectList.deserializeBinary
 );
 
-
 /**
  * @param {!proto.project_manager.GetProjectRequest} request The
  *     request proto
@@ -131,16 +131,19 @@ const methodInfo_ProjectManager_GetProjects = new grpc.web.AbstractClientBase.Me
  * @return {!grpc.web.ClientReadableStream<!proto.project_manager.ProjectList>|undefined}
  *     The XHR Node Readable Stream
  */
-proto.project_manager.ProjectManagerClient.prototype.getProjects =
-    function(request, metadata, callback) {
-  return this.client_.rpcCall(this.hostname_ +
-      '/project_manager.ProjectManager/GetProjects',
-      request,
-      metadata || {},
-      methodDescriptor_ProjectManager_GetProjects,
-      callback);
+proto.project_manager.ProjectManagerClient.prototype.getProjects = function(
+  request,
+  metadata,
+  callback
+) {
+  return this.client_.rpcCall(
+    this.hostname_ + "/project_manager.ProjectManager/GetProjects",
+    request,
+    metadata || {},
+    methodDescriptor_ProjectManager_GetProjects,
+    callback
+  );
 };
-
 
 /**
  * @param {!proto.project_manager.GetProjectRequest} request The
@@ -150,15 +153,16 @@ proto.project_manager.ProjectManagerClient.prototype.getProjects =
  * @return {!Promise<!proto.project_manager.ProjectList>}
  *     A native promise that resolves to the response
  */
-proto.project_manager.ProjectManagerPromiseClient.prototype.getProjects =
-    function(request, metadata) {
-  return this.client_.unaryCall(this.hostname_ +
-      '/project_manager.ProjectManager/GetProjects',
-      request,
-      metadata || {},
-      methodDescriptor_ProjectManager_GetProjects);
+proto.project_manager.ProjectManagerPromiseClient.prototype.getProjects = function(
+  request,
+  metadata
+) {
+  return this.client_.unaryCall(
+    this.hostname_ + "/project_manager.ProjectManager/GetProjects",
+    request,
+    metadata || {},
+    methodDescriptor_ProjectManager_GetProjects
+  );
 };
 
-
 module.exports = proto.project_manager;
-

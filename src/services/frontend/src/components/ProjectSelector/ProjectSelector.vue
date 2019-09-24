@@ -2,10 +2,18 @@
   <div id="project-selector">
     <form>
       <div class="form-row">
-        <label for="projectSelector" class="col-sm-4 col-form-label">Project:</label>
-        <select v-model="selectedProject" class="form-control col-sm-6" id="projectSelector">
+        <label for="projectSelector" class="col-sm-4 col-form-label"
+          >Project:</label
+        >
+        <select
+          v-model="selectedProject"
+          class="form-control col-sm-6"
+          id="projectSelector"
+        >
           <option value selected disabled>Select project...</option>
-          <option v-for="(item, index) in projectList" v-bind:key="index">{{item.name}}</option>
+          <option v-for="(item, index) in projectList" :key="index">{{
+            item.name
+          }}</option>
         </select>
       </div>
     </form>
@@ -22,6 +30,7 @@ export default {
   props: {
     msg: String
   },
+  // Component parameters
   data: function() {
     return {
       projectManagerHost: "localhost",
@@ -33,6 +42,7 @@ export default {
       selectedProject: ""
     };
   },
+  // This runs on component creation
   created: function() {
     this.client = new ProjectManagerClient(
       `http://${this.projectManagerHost}:${this.projectManagerPort}`,
@@ -43,6 +53,12 @@ export default {
   },
   // Start method definitions
   methods: {
+    /**
+     * This function gets called on component creation.
+     * Contacts the Project Manager server and gets
+     * a list of active project for the user in the
+     * service account used.
+     */
     getProjects: function() {
       console.log("Starting request Projects function.");
 
