@@ -26,5 +26,5 @@ class Config:
         """Initialize settings."""
         # TODO: This only works when standing in lab_keeper.py directory.
         self.credentials = '../../credentials.json'
-        self.project = 'prod-host-4f86'  # TODO: Make this an input parameter.
+        self.project = 'oneye-231521'  # TODO: Make this an input parameter.
         self.zone_prefixes = ['us']  # TODO: Make this an input parameter.
