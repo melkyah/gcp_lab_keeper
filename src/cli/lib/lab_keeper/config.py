@@ -28,3 +28,5 @@ class Config:
         self.credentials = '../../credentials.json'
         self.project = 'oneye-231521'  # TODO: Make this an input parameter.
         self.zone_prefixes = ['us']  # TODO: Make this an input parameter.
+        self.label_key = "shutdown" # TODO: Make this an input parameter.
+        self.label_value = "true"  # TODO: Make this an input parameter.

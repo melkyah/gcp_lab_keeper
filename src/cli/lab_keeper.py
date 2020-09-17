@@ -44,13 +44,20 @@ class LabKeeper:
         # The list of the zone prefixes for this request.
         self.wanted_zone_prefixes = self.config.zone_prefixes
 
-    def _request_instances(self, project, target_zones):
+        # VM Label and value for shutdown flagging.
+        self.label_key = self.config.label_key
+        self.label_value = self.config.label_value
+
+
+    def _request_instances(self, project, target_zones, label_key, label_value):
         """Make an API call to return all existing instances for a zone in a project."""
         instance_list = []
         pprint(f"Looking for instances in project {project}.")
+        pprint(f"Looking for instances with label '{label_key}'='{label_value}'")
 
         for zone in target_zones:
-            instance_request = self.service.instances().list(project=project, zone=zone)
+            instance_request = self.service.instances().list(
+                project=project, zone=zone, filter=f"labels.{label_key} = {label_value}")
 
             while instance_request is not None:
                 response = instance_request.execute()
@@ -60,8 +67,8 @@ class LabKeeper:
 
                         instance_list.append(instance)
 
-                    instance_request = self.service.instances().list_next(previous_request=instance_request,
-                                                                          previous_response=response)
+                    instance_request = self.service.instances().list_next(
+                        previous_request=instance_request, previous_response=response)
                     pprint(
                         f"{len(response['items'])} instances found in {zone}.")
 
@@ -166,7 +173,7 @@ class LabKeeper:
         target_zones = self._filter_zones(self.wanted_zone_prefixes, zone_list)
 
         # Get a list of instances for each target zone
-        instances_list = self._request_instances(self.project, target_zones)
+        instances_list = self._request_instances(self.project, target_zones, self.label_key, self.label_value)
 
         # Create a list of instances by status
         instance_status_list = self._get_instances_bystatus(instances_list)
