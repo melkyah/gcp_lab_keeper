@@ -129,8 +129,12 @@ class LabKeeper:
 
         # Print formatted contents of dictionary
         for status in instances_bystatus:
+            pprint("######################")
             pprint(
-                f"{status} instances: {', '.join(map(str, instances_bystatus[status]))}")
+                f"{status} instances:")
+            pprint("######################")
+            for instance in instances_bystatus[status]:
+                pprint(f"{instance['name']} in {instance['zone']}")
 
         return instances_bystatus
 
