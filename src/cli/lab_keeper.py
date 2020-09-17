@@ -38,8 +38,8 @@ class LabKeeper:
         self.service = discovery.build(
             'compute', 'v1', credentials=self.credentials)
 
-        # Project ID for this request.
-        self.project = self.config.project
+        # List of Project IDs for this request.
+        self.project_list = self.config.project_list
 
         # The list of the zone prefixes for this request.
         self.wanted_zone_prefixes = self.config.zone_prefixes
@@ -167,19 +167,27 @@ class LabKeeper:
     def main(self):
         """Main"""
         # Get a list of zone names
-        zone_list = self._request_zones(self.project)
+        zone_list = self._request_zones(self.project_list[0])
 
         # Get only wanted zones
         target_zones = self._filter_zones(self.wanted_zone_prefixes, zone_list)
 
-        # Get a list of instances for each target zone
-        instances_list = self._request_instances(self.project, target_zones, self.label_key, self.label_value)
+        # Get a list of instances for each target by project
+        instances_list_projects = {}
+        for project in self.project_list:
+            instances = self._request_instances(
+                project, target_zones, self.label_key, self.label_value)
+            instances_list_projects[project] = instances
 
-        # Create a list of instances by status
-        instance_status_list = self._get_instances_bystatus(instances_list)
+        # Create a list of instances by status by project
+        instance_status_list_projects = {}
+        for project in instances_list_projects:
+            instance_status_list = self._get_instances_bystatus(instances_list_projects[project])
+            instance_status_list_projects[project] = instance_status_list
 
         # Stop running VMs
-        self.stop_running_instances(instance_status_list, self.project)
+        for project in instance_status_list_projects:
+            self.stop_running_instances(instance_status_list_projects[project], project)
 
         return
 
